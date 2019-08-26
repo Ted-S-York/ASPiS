@@ -24,8 +24,8 @@ import multiprocessing
 
 ################################################################################
 #--- iSpec directory -------------------------------------------------------------
-#ispec_dir = os.path.dirname(os.path.realpath(__file__)) + "/"
-ispec_dir = '/home/ted/iSpec/'
+#This must be changed to match your iSpec installation directory
+ispec_dir = '~/iSpec/'
 sys.path.insert(0, os.path.abspath(ispec_dir))
 import ispec
 

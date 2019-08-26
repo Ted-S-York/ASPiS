@@ -1,22 +1,40 @@
 import ispec_functions as isp
 
-#Change to match desired target, format must match spectrum filename
+#---------------------------USER INPUT & OPTIONS------------------------------#
+
+#Format must match spectrum filename
 spectrum_id = raw_input("Please define the spectrum to be processed: ")
 info_id = spectrum_id + "_info.txt"
 title = spectrum_id
+
+#Degree of telluric line preservation, 0 = complete removal, 100 = no removal
+telluric_degree = 0
+
+#Start- and endpoints for resolution degradation
+start_resolution = 80000
+final_resolution = 40000
+
+#Median and maximum wave range for continuum normalisation, must be floats
+med_wave = 3.0
+max_wave = 4.0
+
+#Minimum and maximum values for spectrum wavelength in nm, used in resampling
+lambda_min = 424.76
+lambda_max = 763.21
+
+#----------------------------SPECTRUM PROCESSING------------------------------#
 
 #Loads text file and converts to fits
 isp.read_write_spectrum(spectrum_id)
 spectrum_id += "_processed.fits"
 
 #Tellluric and velocity corrections
-#Numerical argument is degree of removal of Tellurics, 0 = complete removal, 100 = no removal
-isp.clean_telluric_regions(spectrum_id, 0)
+isp.clean_telluric_regions(spectrum_id, telluric_degree)
 isp.determine_radial_velocity_with_mask(spectrum_id)
 
 #SNR estimations
-snr_err = isp.estimate_snr_from_flux(spectrum_id)
-snr_flux = isp.estimate_snr_from_err(spectrum_id)
+snr_flux = isp.estimate_snr_from_flux(spectrum_id)
+snr_err = isp.estimate_snr_from_err(spectrum_id)
 
 #Create text file for additional spectrum info
 with open(info_id, "w") as file:
@@ -26,11 +44,11 @@ with open(info_id, "w") as file:
 
 #Degrade resolution, normalise continuum and resample
 #Number arguments are starting and ending resolution
-isp.degrade_resolution(spectrum_id, 80000, 40000)
+isp.degrade_resolution(spectrum_id, start_resolution, final_resolution)
 #Arguments are median and maximum wave range, must be floats 
-isp.normalize_whole_spectrum(spectrum_id, 3.0, 4.0)
+isp.normalize_whole_spectrum(spectrum_id, med_wave, max_wave)
 #Arguments are wavelength range of final spectrum
-isp.resample_spectrum(spectrum_id, 424.76, 763.21)
+isp.resample_spectrum(spectrum_id, lambda_min, lambda_max)
 
 isp.sendoff(spectrum_id)
 
