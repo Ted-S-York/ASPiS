@@ -8,14 +8,14 @@ mat_contents = sio.loadmat('fulldata.mat')
 fullwave = mat_contents['fullwave']
 fullint = mat_contents['fullint']
 
-# ----------USER INPUT SECTION----------
-starname = 'test'
+#-----------------------------USER INPUT SECTION------------------------------#
+starname = raw_input('Please define the title to be used for this spectrum: ')
 # Must be manually changed to match dimensions of matlab arrays
 cols = 169317
 rows = 15
 # Display spectrum after calculation?
 show_spectrum = 1
-# --------------------------------------
+#-----------------------------------------------------------------------------#
 
 # Creates blank lists to be overwritten by matlab data
 x = np.zeros(cols)
@@ -26,12 +26,12 @@ err = np.zeros(cols)
 for j in range(0, cols):
     # Divide by 10 to convert A to nm
     x[j] = (fullwave[0, j]/10)
-    tempsum = 0
+    tempsum = []
     diffsum = 0
     # Write averaged y values to list
     for i in range(0, rows):
-        tempsum = tempsum + fullint[i, j]
-    y[j] = tempsum/rows
+        tempsum.append(fullint[i, j])
+    y[j] = np.median(tempsum)
     # Write standard error to list
     for k in range(0, rows):
         diffsum = diffsum + (fullint[k, j]-y[j])**2
