@@ -15,7 +15,7 @@ purge_log = True
 purge_linemasks = True
 
 #Species with fewer lines than this will not be analysed.
-line_threshold = 6
+line_threshold = 1
 
 #Species to be analysed should be listed here in the format "Fe 1" etc.
 species_list = ["C 1","N 1","O 1","Na 1","Na 2","Mg 1","Mg 2","Si 1","Si 2",
@@ -38,7 +38,7 @@ if purge_linemasks:
 
 temp_id = spectrum_id + "_info.txt"
 
-with open(temp_id, "r") as file :
+with open(temp_id, "r") as file:
     filedata = file.read()
 
 filedata = filedata.replace(',', '\n')
@@ -56,7 +56,7 @@ with open(info_id, "r") as file :
     params_data = file.read()
 
 params = re.findall(r"[-+]?\d*\.\d+|\d+", params_data)
-del params[0:3]
+del params[0:2]
 del params[8:]
 
 for i in range(0, len(params)):
