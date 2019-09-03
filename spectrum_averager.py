@@ -12,11 +12,11 @@ jul_date = mat_contents['jd']
 #-----------------------------USER INPUT SECTION------------------------------#
 starname = raw_input('Please define the title to be used for this spectrum: ')
 
-use_spectrum_binning = True
+use_spectrum_binning = False
 
 if use_spectrum_binning:
     #Input target pulsation period in days
-    period = 1.315
+    period = 1
     #Define desired number of spectral bins, 4 is a recommended minimum.
     no_bins = 4
     zero_point = jul_date[0, 0]
