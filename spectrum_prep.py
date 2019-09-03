@@ -5,7 +5,6 @@ import ispec_functions as isp
 #Format must match spectrum filename
 spectrum_id = raw_input("Please define the spectrum to be processed: ")
 info_id = spectrum_id + "_info.txt"
-title = spectrum_id
 
 #Degree of telluric line preservation, 0 = complete removal, 100 = no removal
 telluric_degree = 0
@@ -38,7 +37,6 @@ snr_err = isp.estimate_snr_from_err(spectrum_id)
 
 #Create text file for additional spectrum info
 with open(info_id, "w") as file:
-    file.write(title)
     file.write('\nSNR from errors = %s' % snr_err)
     file.write('\nSNR from fluxes = %s' % snr_flux)
 
