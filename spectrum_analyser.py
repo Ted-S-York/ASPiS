@@ -15,15 +15,10 @@ purge_log = True
 purge_linemasks = True
 
 #Species with fewer lines than this will not be analysed.
-line_threshold = 1
+line_threshold = 3
 
 #Species to be analysed should be listed here in the format "Fe 1" etc.
-species_list = ["C 1","N 1","O 1","Na 1","Na 2","Mg 1","Mg 2","Si 1","Si 2",
-                "S 1","S 2","Ca 1","Ca 2","Sc 1","Sc 2","Ti 1","Ti 2","V 1",
-                "V 2","Cr 1","Cr 2","Mn 1","Mn 2","Fe 1","Fe 2","Co 1","Co 2",
-                "Ni 1","Ni 2","Cu 1","Cu 2","Zn 1","Zn 2","Sr 1","Sr 2","Y 1",
-                "Zr 1","Zr 2","Ba 1","Ba 2","La 1","La 2","Ce 1","Ce 2","Pr 1",
-                "Pr 2","Nd 1","Nd 2","Sm 1","Sm 2","Eu 1","Eu 2","Gd 1", "Gd 2"]
+species_list = ["Fe 1", "Fe 2"]
 
 #-------------------------ATMOSPHERIC PARAMETERS------------------------------#
 

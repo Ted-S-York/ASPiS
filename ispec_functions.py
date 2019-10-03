@@ -104,7 +104,7 @@ def resample_spectrum(spec_id, min_wl, max_wl):
     star_spectrum = ispec.read_spectrum(spec_id)
     #--- Resampling  --------------------------------------------------------------
     logging.info("Resampling...")
-    wavelengths = np.arange(min_wl, max_wl, 0.001)
+    wavelengths = np.arange(min_wl, max_wl, 0.002)
     #resampled_star_spectrum = ispec.resample_spectrum(star_spectrum, wavelengths, method="bessel", zero_edges=True)
     resampled_star_spectrum = ispec.resample_spectrum(star_spectrum, wavelengths, method="linear", zero_edges=True)
     ispec.write_spectrum(resampled_star_spectrum, spec_id)
@@ -119,7 +119,7 @@ def normalize_whole_spectrum(spec_id, med_wave, max_wave):
     model = "Splines" # "Polynomy"
     degree = 2
     nknots = None # Automatic: 1 spline every 5 nm
-    from_resolution = 40000
+    from_resolution = 47000
 
     # Strategy: Filter first median values and secondly MAXIMUMs in order to find the continuum
     order='median+max'
@@ -165,9 +165,9 @@ def find_fe_lines(spec_id):
     telluric_linelist = None
     vel_telluric = None
 
-    resolution = 80000
+    resolution = 47000
     smoothed_star_spectrum = ispec.convolve_spectrum(star_spectrum, resolution)
-    min_depth = 0.05
+    min_depth = 0.10 #0.05
     max_depth = 1.00
     star_linemasks = ispec.find_linemasks(star_spectrum, star_continuum_model, \
                             atomic_linelist=atomic_linelist, \
@@ -197,6 +197,7 @@ def find_fe_lines(spec_id):
     ispec.write_line_regions(iron_star_linemasks, "fe_linemasks.txt")
 
 def find_linemasks(spec_id, species):
+    #code = "synthe"
     code = "spectrum"
     star_spectrum = ispec.read_spectrum(spec_id)
     #--- Continuum fit -------------------------------------------------------------
@@ -220,9 +221,9 @@ def find_linemasks(spec_id, species):
     telluric_linelist = None
     vel_telluric = None
 
-    resolution = 80000
+    resolution = 47000
     smoothed_star_spectrum = ispec.convolve_spectrum(star_spectrum, resolution)
-    min_depth = 0.05
+    min_depth = 0.10 #0.05
     max_depth = 1.00
     star_linemasks = ispec.find_linemasks(star_spectrum, star_continuum_model, \
                             atomic_linelist=atomic_linelist, \
@@ -311,23 +312,28 @@ def clean_telluric_regions(spec_id, clean_percent):
     ispec.write_spectrum(clean_star_spectrum, spec_id)
 
 def determine_parameters(spec_id, lines_id):
+    #code = "synthe"
     code = "spectrum"
     star_spectrum = ispec.read_spectrum(spec_id)
     # Use a fixed value because the spectrum is already normalized
     star_continuum_model = ispec.fit_continuum(star_spectrum, fixed_value=1.0, model="Fixed value")
     normalized_star_spectrum = ispec.normalize_spectrum(star_spectrum, star_continuum_model, consider_continuum_errors=False)
     #--- Model spectra ----------------------------------------------------------
+    params = []
+    with open('config.txt', 'r') as cfile:
+        for line in cfile:
+            params.append(float(str(line)[:-1]))
     # Parameters
-    initial_teff = 5771.0
-    initial_logg = 4.44
-    initial_MH = 0.00
-    initial_vmic = 4.21 #ispec.estimate_vmic(initial_teff, initial_logg, initial_MH)
-    initial_vmac = 4.21 #ispec.estimate_vmac(initial_teff, initial_logg, initial_MH)
-    initial_vsini = 1.6
-    initial_limb_darkening_coeff = 0.6
-    initial_R = 40000
-    initial_vrad = 0
-    max_iterations = 6
+    initial_teff = params[0]
+    initial_logg = params[1]
+    initial_MH = params[2]
+    initial_vmic = params[3]
+    initial_vmac = params[4]
+    initial_vsini = params[5]
+    initial_limb_darkening_coeff = params[6]
+    initial_R = params[7]
+    initial_vrad = params[8]
+    max_iterations = params[9]
 
     # Selected model amtosphere, linelist and solar abundances
     #model = ispec_dir + "/input/atmospheres/MARCS/modeled_layers_pack.dump"
@@ -392,7 +398,7 @@ def determine_parameters(spec_id, lines_id):
             enhance_abundances=True, \
             use_errors = True, \
             vmic_from_empirical_relation = False, \
-            vmac_from_empirical_relation = True, \
+            vmac_from_empirical_relation = False, \
             max_iterations=max_iterations, \
             tmp_dir = None, \
             code=code)
@@ -417,7 +423,8 @@ def determine_parameters(spec_id, lines_id):
 
 def determine_abundances(spec_id, species, params):
     multiprocessing.current_process().daemon=False
-    code="spectrum"
+    #code = "synthe"
+    code = "spectrum"
     star_spectrum = ispec.read_spectrum(spec_id)
     
     # Use a fixed value because the spectrum is already normalized
@@ -553,7 +560,8 @@ def determine_error(spec_id, species, params, abundance, scatt_err):
     less_teff[1] -= 100
     
     plus_logg = list(params)
-    plus_logg[5] += 0.1
+    if params[5] <= 4.8:
+        plus_logg[5] += 0.1
     less_logg = list(params)
     less_logg[5] -= 0.1
     

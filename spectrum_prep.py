@@ -11,7 +11,7 @@ telluric_degree = 0
 
 #Start- and endpoints for resolution degradation
 start_resolution = 80000
-final_resolution = 40000
+final_resolution = 47000
 
 #Median and maximum wave range for continuum normalisation, must be floats
 med_wave = 3.0
@@ -19,7 +19,7 @@ max_wave = 4.0
 
 #Minimum and maximum values for spectrum wavelength in nm, used in resampling
 lambda_min = 424.76
-lambda_max = 763.21
+lambda_max = 762.90
 
 #----------------------------SPECTRUM PROCESSING------------------------------#
 

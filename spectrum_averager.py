@@ -17,8 +17,8 @@ use_spectrum_binning = False
 if use_spectrum_binning:
     #Input target pulsation period in days
     period = 1
-    #Define desired number of spectral bins, 4 is a recommended minimum.
-    no_bins = 4
+    #Define desired number of spectral bins, 5 is a recommended minimum.
+    no_bins = 5
     zero_point = jul_date[0, 0]
 
 #-----------------------------------------------------------------------------#
@@ -107,6 +107,8 @@ else:
         with open(title, 'w+') as datafile_id:
             datafile_id.write("waveobs\tflux\terr\n")
             np.savetxt(datafile_id, data, fmt=['%s', '%s', '%s'], delimiter='\t')
+
+
 
 print('Complete')
 
