@@ -13,6 +13,23 @@ INSTALLATION AND USAGE
 
 ASPiS can be installed by simply downloading the included files and placing them in a directory of choice, this does NOT need to be the same as the iSpec install directory. Once they are in place, the user must change the ispec_dir variable at the top of ispec_functions.py to match the iSpec directory path.
 
+CONFIG.TXT:
+
+This file contains the initial guess values for the atmospheric parameter determination step. These should be changed to a reasonable approximation of the final values for the spectrum being analysed. The variable values are listed in the file, top to bottom accordingly:
+
+- Effective temperature Teff (K)
+- Surface gravity log g (dex)
+- Metallicity [Fe/H]
+- Microturbulence velocity vmic (km/s)
+- Macroturbulence velocity vmac (km/s)
+- Projected equatorial velocity vsini (km/s)
+- Limb darkening coefficient
+- Resolution
+- Radial velocity (km/s)
+- Number of iterations
+
+Radial velocity should be set to zero in most cases as the spectrum has a correction applied to it during the preparation phase.
+
 SPECTRUM_AVERAGER.PY:
 
 This script takes the full reduced spectral data from MEGARA and produces a single median spectrum that can be parsed by iSpec. This requires a MEGARA output file that must be titled 'fulldata.mat' and should contain the wavelength (fullwave), flux (fullint) and Julian date (jd) information for all observations. A copy of fulldata.mat must be placed in the ASPiS directory for spectrum_averager.py to function. 
